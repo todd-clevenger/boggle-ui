@@ -1,6 +1,5 @@
 import React from 'react';
 import './Board.css';
-//import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 function Tile(props) {
   return (
@@ -18,13 +17,13 @@ export default class Board extends React.Component {
       tiles: ["","","","","","","","","","","","","","","",""],
     }
 
-    // TODO:  Clean up async initialization - need a prestate while the
-    // remote call & promise complete.  This method loads with a default &
-    // then updates after the fact.
+    // initialize the board layout asynchronously
+    // needs to be done only once per game
     this.getBoard();
   }
 
   getBoard() {
+    //TODO:  Need to figure out how to make configurable
     fetch('http://localhost:3000/v1/board', {
       method: 'POST',
       headers: {
@@ -35,13 +34,14 @@ export default class Board extends React.Component {
     .then(data => console.log(JSON.stringify(data)))
     .catch(error => console.error('Error:', error));
   }
-  
+
   renderTile(i) {
     return (
       <Tile value={this.state.tiles[i]} />
     )
   }
 
+  //TODO:  Consider reducing code by writing rows/tiles in a loop
   render() {
     return (
       <div id="board">
