@@ -5,14 +5,14 @@ export default class Board extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { text: '' };
+    this.state = { text: '', hasStatusMessage: false, isValid: false };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(e) {
     console.log('handle change -> set target value: ' + e.target.value);
-    this.setState({ text: e.target.value });
+    this.setState({ text: e.target.value, hasStatusMessage: false });
   }
 
   handleSubmit(e) {
@@ -34,7 +34,7 @@ export default class Board extends React.Component {
       },
       body: JSON.stringify({ term: this.state.text })
     }).then(res => res.json())
-      //.then(json => this.setState({tiles: json.tiles}))
+      .then(json => this.setState({isValid: json.exists, hasStatusMessage: true}))
       .then(data => console.log(JSON.stringify(data)))
       .catch(error => console.error('Error:', error));
   }
@@ -58,6 +58,12 @@ export default class Board extends React.Component {
           >
             Submit Word
           </button>
+          {this.state.hasStatusMessage === true &&
+            <div id="status-message">
+            <p></p>
+              The word '{this.state.text}' is <b>{this.state.isValid ? 'valid' : 'invalid'}</b>.
+            </div>
+          }
         </form>
       </div>
     );
