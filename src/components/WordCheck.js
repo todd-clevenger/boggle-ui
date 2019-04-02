@@ -24,6 +24,8 @@ export default class Board extends React.Component {
     }
 
     console.log('before fetch for /words');
+    console.log('this.props.tiles => ' + this.props.tiles)
+    console.log('JSON body =>' + JSON.stringify({ term: this.state.text, tiles: this.props.tiles }));
 
     //TODO:  Need to figure out how to make configurable
     fetch('http://localhost:3000/v1/words', {
@@ -32,7 +34,7 @@ export default class Board extends React.Component {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ term: this.state.text })
+      body: JSON.stringify({ term: this.state.text, tiles: this.props.tiles })
     }).then(res => res.json())
       .then(json => this.setState({isValid: json.exists, hasStatusMessage: true}))
       .then(data => console.log(JSON.stringify(data)))

@@ -12,13 +12,10 @@ function Tile(props) {
 export default class Board extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {};
+  }
 
-    this.state = {
-      tiles: ["","","","","","","","","","","","","","","",""],
-    }
-
-    // initialize the board layout asynchronously
-    // needs to be done only once per game
+  componentDidMount() {
     this.getBoard();
   }
 
@@ -30,14 +27,14 @@ export default class Board extends React.Component {
         'Content-Type': 'application/json'
       }
     }).then(res => res.json())
-    .then(json => this.setState({tiles: json.tiles}))
-    .then(data => console.log(JSON.stringify(data)))
+    .then(json => this.props.onBoardChange(json.tiles))
     .catch(error => console.error('Error:', error));
   }
 
   renderTile(i) {
+    const tile = this.props.tiles[i];
     return (
-      <Tile value={this.state.tiles[i]} />
+      <Tile value={tile} />
     )
   }
 
